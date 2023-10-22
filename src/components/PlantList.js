@@ -5,22 +5,23 @@ function PlantList({newPlant, searchTerm}) {
 
 
   const [plants, setPlants ] = useState([])
-  const [updatedPlant, setUpdatedPlant] = useState({})
-  
+ 
+  const [deletedPlant, setDeletedPlant] = useState({})
 
-  function updatePlant(plant) {
-    setUpdatedPlant(plant)
-    fetch(`http://localhost:6001/plants/${plant.id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            price: 0,
-          }),
-        })
-           
+  function onDelete (plant) {
+    setDeletedPlant(plant)
   }
+
+  useEffect (()=> {
+    const updated = plants.filter(plant=> plant !== deletedPlant)
+    setPlants(updated)
+
+    fetch(`http://localhost:6001/plants/${deletedPlant.id}`, {
+      method: "DELETE",
+    })
+  },[deletedPlant])
+
+  
 
  
   
@@ -58,7 +59,9 @@ function PlantList({newPlant, searchTerm}) {
   console.log(plants)
   return (
     <ul className="cards">{plants.map((plant)=>
-      <PlantCard key={plant.id} plant={plant} onUpdatePlant={updatePlant} updatedPlant={updatedPlant} />
+      <PlantCard key={plant.id} plant={plant} 
+      onDelete={onDelete}
+      />
       )}</ul>
   );
 }

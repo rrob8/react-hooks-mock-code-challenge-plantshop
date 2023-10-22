@@ -28,6 +28,10 @@ button.primary {
   color: white;
 }
 
+.container {
+  display: flex;
+}
+
 .app {
   margin: 0 auto;
   max-width: 1200px;
